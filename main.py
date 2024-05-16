@@ -13,8 +13,8 @@ def readLasFile(filePath):
     Y = selectedPoints['Y'] / 100
     Z = selectedPoints['Z'] / 100
     coords = np.column_stack((X, Y, Z))
-    globalXMin, globalXMax = X.min(), X.max()
-    globalYMin, globalYMax = Y.min(), Y.max()
+    globalXMin, globalXMax = min(X), max(X)
+    globalYMin, globalYMax = min(Y), max(Y)
     endTime = time.time()
     print(f"Extracted {len(coords)} points from the las file in {endTime - startTime} seconds")
     return coords, [globalXMin, globalXMax, globalYMin, globalYMax]
@@ -115,10 +115,9 @@ def getAvgErrors(planes, lasPoints):
         
         mask = (xMin <= x) & (x <= xMax) & (yMin <= y) & (y <= yMax)
         distances = (a * x[mask] + b * y[mask] + c * z[mask] + d) / np.sqrt(a ** 2 + b ** 2 + c ** 2)
-        valid_distances = distances[(distances > -1) & (distances < 1)]
+        validDistances = distances[(distances > -1) & (distances < 1)]
         
-        averageErrors.append([key, np.average(valid_distances)])
-        print(f"Calculated average error for chunk {numerator}")
+        averageErrors.append([key, np.average(validDistances)])
         numerator += 1
     endTime = time.time()
     print(f"Calculated average errors in {endTime - startTime} seconds")
@@ -138,7 +137,7 @@ def plotSurfaces(planes, averageErrors):
         normalized_error = (error - min_error) / (max_error - min_error)
         cmap = plt.colormaps['YlOrRd']
         color = cmap(normalized_error)
-        ax.contourf(X, Y, Z, alpha=0.5, colors=[color])
+        ax.contourf(X, Y, Z, alpha=0.90, colors=[color])
     ax.set_aspect('equal', 'box')
     ylim = ax.get_ylim()
     ax.set_ylim(ylim[0] - 0.01, ylim[1] + 0.01)
