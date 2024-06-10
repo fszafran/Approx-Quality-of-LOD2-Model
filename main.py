@@ -201,8 +201,8 @@ def plotSurfaces(planes, averageErrors):
 
 if __name__ == '__main__':
     start_time = time.time()
-    lasFile = r'C:\Users\filo1\Desktop\szkola_sem4\Standardy_3D\pd3\lidar.laz'
-    gmlFile = r'C:\Users\filo1\Desktop\szkola_sem4\Standardy_3D\pd3'
+    lasFile = r'\pd3\lidar.laz'
+    gmlFile = r'\pd3'
     lasPoints, globalBbox = readLasFile(lasFile)
     lod2Dict = extractLOD2Points(gmlFile, globalBbox)
     planes = createPlanes(lod2Dict)
